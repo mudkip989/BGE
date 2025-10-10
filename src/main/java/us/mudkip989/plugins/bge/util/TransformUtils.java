@@ -17,4 +17,10 @@ public class TransformUtils {
 
         return new EulerAngle(-Math.asin(rotmat.m20), Math.atan2(rotmat.m21, rotmat.m22), Math.atan2(rotmat.m10, rotmat.m00));
     }
+    public static Matrix4f getTransform(Location loc){
+        return new Matrix4f()
+                .setTranslation((float) loc.x(), (float) loc.y(), (float) loc.z())
+                .setRotationXYZ(loc.getPitch(), loc.getYaw(), 0);
+    }
+
 }
