@@ -25,10 +25,6 @@ public abstract class Game {
         task = runGameTask();
     }
 
-    public void createObject(Class<Object> call){
-
-    }
-
     public abstract BukkitTask runGameTask();
 
 }

@@ -22,7 +22,9 @@ public class TestGame extends Game{
         display1 = new ModelDisplay(TransformUtils.getTransform(new Location(world, 0, 0, 0)), world, uuid, new ItemStack(Material.COBBLESTONE));
         display2 = new ModelDisplay(TransformUtils.getTransform(new Location(world, 0, 0, 0)), world, uuid, new ItemStack(Material.DIAMOND_BLOCK));
 
-        display1.
+        display2.setParent(display1);
+
+        display1.update(transform, world);
     }
 
 
@@ -33,14 +35,7 @@ public class TestGame extends Game{
         return new BukkitRunnable() {
             @Override
             public void run() {
-                // switch (input) {
-                // case "rock-rock":
-                //   [draw logic]
-                // case "rock-scissors":
-                //   [p1 win logic]
-                // case "rock-paper":
-                //   [p2 win logic]
-                // }
+                //Rotation Test happens here.
             }
         }.runTaskTimerAsynchronously(BGE.instance, 1, 1);
     }

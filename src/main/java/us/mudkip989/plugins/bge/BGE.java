@@ -17,7 +17,8 @@ public final class BGE extends JavaPlugin {
 
     public static BGE instance;
     public static HashMap<Entity, Location> EntityTeleportQueue = new HashMap<>();
-    private static HashMap<String, Class<Game>> gameRegistry = new HashMap<>();
+    private static HashMap<String, Class<? extends Game>> gameRegistry = new HashMap<>();
+    public static HashMap<UUID, ? extends Game> gameInstances = new HashMap<>();
 
 
     @Override
@@ -26,7 +27,7 @@ public final class BGE extends JavaPlugin {
         instance = this;
         PluginManager PM = Bukkit.getPluginManager();
         this.getCommand("boardgameengine").setExecutor(new CommandListener());
-
+        registerGame("bge:rottest", TestGame.class);
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -39,7 +40,7 @@ public final class BGE extends JavaPlugin {
 
     }
 
-    public void registerGame(String id, Class<Game> game){
+    public void registerGame(String id, Class<? extends Game> game){
         gameRegistry.put(id, game);
     }
 
