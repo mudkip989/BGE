@@ -46,24 +46,35 @@ public abstract class Object {
         } else {
             ptran = new Matrix4f().scale(1);
         }
-
-        localtran.translate(transform.getTranslation(new Vector3f()));
-        localtran.rotation(transform.getRotation(new AxisAngle4f()));
-        localtran.mul(ptran);
+        System.out.println("Problem Transformation Here. Needs to apply a transform to another transform");
+        System.out.println(transform);
+        ptran.mul(transform, localtran);
+        System.out.println(localtran);
 
         return localtran;
     }
 
     public Matrix4f getWorldSpaceTransform(Matrix4f ptran) {
         Matrix4f localtran = new Matrix4f();
-        localtran.translate(transform.getTranslation(new Vector3f()));
-        localtran.rotation(transform.getRotation(new AxisAngle4f()));
-        localtran.mul(ptran);
+        System.out.println("4");
+        System.out.println(transform);
+        ptran.mul(transform, localtran);
+        System.out.println(localtran);
 
         return localtran;
     }
 
     public abstract void teleport(Matrix4f trans, World w);
+
+    public void setTransform(Matrix4f trans, World w){
+        try {
+            transform = (Matrix4f) trans.clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("2");
+        System.out.println(transform);
+    }
 
     public void delete() {
         setParent(null);

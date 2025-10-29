@@ -7,8 +7,10 @@ import org.joml.Math;
 
 public class TransformUtils {
     public static Location getLocation(Matrix4f transform, World world) {
-        Vector3f vec = transform.getTranslation(new Vector3f());
-
+        Vector3f vec = new Vector3f();
+        transform.getTranslation(vec);
+//        System.out.println(transform);
+//        System.out.println(vec);
         return new Location(world, vec.x, vec.y, vec.z);
     }
     public static EulerAngle getEulerRotation(Matrix4f transform) {
@@ -20,7 +22,7 @@ public class TransformUtils {
     public static Matrix4f getTransform(Location loc){
         return new Matrix4f()
                 .setTranslation((float) loc.x(), (float) loc.y(), (float) loc.z())
-                .setRotationXYZ(loc.getPitch(), loc.getYaw(), 0);
+                .setRotationYXZ(-Math.toRadians(loc.getYaw()), Math.toRadians(loc.getPitch()), 0);
     }
 
 }

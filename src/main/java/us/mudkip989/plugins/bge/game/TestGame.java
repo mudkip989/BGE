@@ -20,11 +20,14 @@ public class TestGame extends Game{
     public TestGame(Matrix4f transform, World world) {
         super(transform, world);
         display1 = new ModelDisplay(TransformUtils.getTransform(new Location(world, 0, 0, 0)), world, uuid, new ItemStack(Material.COBBLESTONE));
-        display2 = new ModelDisplay(TransformUtils.getTransform(new Location(world, 0, 0, 0)), world, uuid, new ItemStack(Material.DIAMOND_BLOCK));
+        display2 = new ModelDisplay(TransformUtils.getTransform(new Location(world, 1, 0, 0)), world, uuid, new ItemStack(Material.DIAMOND_BLOCK));
 
         display2.setParent(display1);
-
-        display1.update(transform, world);
+        System.out.println("1");
+        System.out.println(transform);
+        System.out.println(transform.getTranslation(new Vector3f()));
+        display1.setTransform(transform, world);
+        display1.update();
     }
 
 
