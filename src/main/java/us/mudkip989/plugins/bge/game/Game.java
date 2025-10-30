@@ -1,6 +1,8 @@
 package us.mudkip989.plugins.bge.game;
 
+import io.papermc.paper.event.player.*;
 import org.bukkit.*;
+import org.bukkit.event.*;
 import org.bukkit.scheduler.*;
 import org.joml.*;
 import us.mudkip989.plugins.bge.game.object.Object;
@@ -26,5 +28,9 @@ public abstract class Game {
     }
 
     public abstract BukkitTask runGameTask();
+
+    public void ClickEvent(){
+
+    }
 
 }

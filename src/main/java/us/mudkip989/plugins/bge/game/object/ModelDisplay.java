@@ -17,6 +17,10 @@ public class ModelDisplay extends Object{
         super(transformation, w, game);
         entity = (ItemDisplay) w.spawnEntity(TransformUtils.getLocation(transformation, w), EntityType.ITEM_DISPLAY);
         entity.setItemStack(item);
+
+        entity.setTeleportDuration(0);
+        entity.setInterpolationDuration(0);
+        entity.setInterpolationDelay(0);
     }
 
     @Override
@@ -35,7 +39,6 @@ public class ModelDisplay extends Object{
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
-//        System.out.println(temp.getRotation(new AxisAngle4d()));
         entity.setTransformationMatrix(temp.setTranslation(0, 0, 0));
 
     }

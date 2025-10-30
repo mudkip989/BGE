@@ -10,7 +10,6 @@ import us.mudkip989.plugins.bge.Listeners.*;
 import us.mudkip989.plugins.bge.game.*;
 import us.mudkip989.plugins.bge.util.*;
 
-import java.lang.reflect.*;
 import java.util.*;
 
 public final class BGE extends JavaPlugin {
@@ -27,7 +26,7 @@ public final class BGE extends JavaPlugin {
         instance = this;
         PluginManager PM = Bukkit.getPluginManager();
         this.getCommand("boardgameengine").setExecutor(new CommandListener());
-        registerGame("bge:rottest", TestGame.class);
+        registerGame("bge:rottest", RotationTest.class);
         new BukkitRunnable() {
             @Override
             public void run() {

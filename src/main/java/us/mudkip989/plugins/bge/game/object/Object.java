@@ -46,20 +46,14 @@ public abstract class Object {
         } else {
             ptran = new Matrix4f().scale(1);
         }
-        System.out.println("Problem Transformation Here. Needs to apply a transform to another transform");
-        System.out.println(transform);
         ptran.mul(transform, localtran);
-        System.out.println(localtran);
 
         return localtran;
     }
 
     public Matrix4f getWorldSpaceTransform(Matrix4f ptran) {
         Matrix4f localtran = new Matrix4f();
-        System.out.println("4");
-        System.out.println(transform);
         ptran.mul(transform, localtran);
-        System.out.println(localtran);
 
         return localtran;
     }
@@ -72,8 +66,10 @@ public abstract class Object {
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
         }
-        System.out.println("2");
-        System.out.println(transform);
+    }
+
+    public void mulTransform(Matrix4f trans){
+        trans.mul(transform, transform);
     }
 
     public void delete() {

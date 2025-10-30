@@ -9,8 +9,6 @@ public class TransformUtils {
     public static Location getLocation(Matrix4f transform, World world) {
         Vector3f vec = new Vector3f();
         transform.getTranslation(vec);
-//        System.out.println(transform);
-//        System.out.println(vec);
         return new Location(world, vec.x, vec.y, vec.z);
     }
     public static EulerAngle getEulerRotation(Matrix4f transform) {
