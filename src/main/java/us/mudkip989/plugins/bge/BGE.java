@@ -27,6 +27,7 @@ public final class BGE extends JavaPlugin {
         PluginManager PM = Bukkit.getPluginManager();
         this.getCommand("boardgameengine").setExecutor(new CommandListener());
         registerGame("bge:rottest", RotationTest.class);
+        registerGame("bge:clicktest", ClickTest.class);
         new BukkitRunnable() {
             @Override
             public void run() {
