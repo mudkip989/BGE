@@ -33,7 +33,8 @@ public class ModelDisplay extends Object{
     public void teleport(Matrix4f trans, World w) {
         Location loc = TransformUtils.getLocation(trans, w);
         BGE.EntityTeleportQueue.put(entity, loc.setRotation(0, 0));
-        Matrix4f temp = new Matrix4f();
+        new Matrix4f();
+        Matrix4f temp;
         try {
             temp = (Matrix4f) trans.clone();
         } catch (CloneNotSupportedException e) {

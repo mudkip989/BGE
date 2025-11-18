@@ -41,7 +41,7 @@ public class ClickTest extends Game{
         return new BukkitRunnable() {
             @Override
             public void run() {
-                //Rotation Test happens here.
+                //Click Test happens here.
             }
         }.runTaskTimerAsynchronously(BGE.instance, 1, 1);
     }
