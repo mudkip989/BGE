@@ -14,10 +14,11 @@ public class BasicButton extends ModelDisplay {
 
     public BasicButton(Matrix4f transformation, World w, UUID game, ItemStack item) {
         super(transformation, w, game, item);
-        bounding = new hitbox(1,1);
+        bounding = new hitbox(new Vector3f(1,1,1), new Vector3f(0,0,0));
     }
 
     public Matrix4f raycastToObject(Vector3f pos, Vector3f dir){
+
 
         return null;
     }
