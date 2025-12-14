@@ -34,7 +34,7 @@ public abstract class Game {
 
     public abstract BukkitTask runGameTask();
 
-    public void ClickEvent(PlayerInteractEvent e){
+    public void ClickEvent(PlayerInteractEntityEvent e){
 
     }
 

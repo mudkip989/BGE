@@ -54,8 +54,9 @@ public class ClickTest extends Game{
     }
 
     @Override
-    public void ClickEvent(PlayerInteractEvent e) {
+    public void ClickEvent(PlayerInteractEntityEvent e) {
         RaycastResult res = button.raycastToObject(e.getPlayer().getEyeLocation().toVector().toVector3f(), e.getPlayer().getEyeLocation().getDirection().toVector3f(), e.getPlayer().getWorld());
+        System.out.println(res);
         if(res.hit()){
             clickToggle = !clickToggle;
             if(clickToggle){

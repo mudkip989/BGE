@@ -17,6 +17,10 @@ public class InteractionEntity extends Object{
         entity.setInteractionHeight(height);
         entity.setInteractionWidth(width);
         uuid = UUID.randomUUID();
+        entity.addScoreboardTag("bge");
+        entity.addScoreboardTag("interaction");
+        entity.addScoreboardTag("game:"+game.toString());
+        entity.setResponsive(true);
     }
 
     @Override

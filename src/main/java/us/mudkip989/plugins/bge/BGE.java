@@ -20,12 +20,14 @@ public final class BGE extends JavaPlugin {
     public static HashMap<UUID, Game> gameInstances = new HashMap<>();
 
 
+
     @Override
     public void onEnable() {
         // Plugin startup logic
         instance = this;
         PluginManager PM = Bukkit.getPluginManager();
         this.getCommand("boardgameengine").setExecutor(new CommandListener());
+        PM.registerEvents(new PassableEventListener(), this);
         registerGame("bge:rottest", RotationTest.class);
         registerGame("bge:clicktest", ClickTest.class);
         new BukkitRunnable() {
