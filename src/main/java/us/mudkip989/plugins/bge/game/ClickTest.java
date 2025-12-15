@@ -34,7 +34,7 @@ public class ClickTest extends Game{
         display2.setParent(display1);
         display1.setParent(frame);
         button.setParent(display2);
-        frame.setTransform(new Matrix4f().scale(1).setTranslation(transform.getTranslation(new Vector3f())), world);
+        frame.setTransform(transform, world);
         frame.update();
 
         clickToggle = false;
@@ -49,6 +49,7 @@ public class ClickTest extends Game{
             @Override
             public void run() {
                 //Click Test happens here.
+                frame.update();
             }
         }.runTaskTimerAsynchronously(BGE.instance, 1, 1);
     }
