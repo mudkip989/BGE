@@ -27,7 +27,6 @@ public class PassableEventListener implements Listener {
                 Game gam = BGE.gameInstances.get(gameId);
                 gam.ClickEvent(e);
             }
-            System.out.println(gameId);
         }
 
 
