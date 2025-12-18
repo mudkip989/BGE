@@ -1,14 +1,14 @@
-package us.mudkip989.plugins.bge.game.object;
+package us.mudkip989.plugins.bge.game.builtin;
 
 import org.bukkit.*;
 import org.bukkit.entity.*;
-import org.bukkit.event.player.*;
 import org.bukkit.inventory.*;
 import org.bukkit.scheduler.*;
 import org.joml.*;
 import us.mudkip989.plugins.bge.*;
 import us.mudkip989.plugins.bge.dataTypes.*;
 import us.mudkip989.plugins.bge.game.*;
+import us.mudkip989.plugins.bge.game.object.*;
 import us.mudkip989.plugins.bge.util.*;
 
 import java.util.*;
@@ -26,13 +26,13 @@ public class HoverTest extends Game{
             super(transform, world);
             //Object init
             display1 = new ModelDisplay(TransformUtils.getTransform(new Location(world, 0, 0, 0)), world, uuid, new ItemStack(Material.COBBLESTONE));
-            display2 = new ModelDisplay(TransformUtils.getTransform(new Location(world, 1, 0, 0)), world, uuid, new ItemStack(Material.DIAMOND_BLOCK));
-            button = new BasicButton(TransformUtils.getTransform(new Location(world, 0, 0, 0)), world, uuid, new hitbox(new Vector3f(1,1,1), new Vector3f(0,0,0)));
+            display2 = new ModelDisplay(TransformUtils.getTransform(new Location(world, 0, 0, 0)), world, uuid, new ItemStack(Material.DIAMOND_BLOCK));
+            button = new BasicButton(TransformUtils.getTransform(new Location(world, 1, 0, 0)).scale(new Vector3f(1, 2, 1)), world, uuid, new hitbox(new Vector3f(1,1,1), new Vector3f(0,0,0)));
             frame = new InteractionEntity(TransformUtils.getTransform(new Location(world, 0, 0, 0)), world, uuid, 1, 1);
             //Parenting
-            display2.setParent(display1);
+            display2.setParent(button);
             display1.setParent(frame);
-            button.setParent(display2);
+            button.setParent(display1);
             frame.setTransform(transform, world);
             frame.update();
 
@@ -57,6 +57,12 @@ public class HoverTest extends Game{
 
                     if(count > 0) {
                         display2.setItemMaterial(new ItemStack(Material.GOLD_BLOCK));
+//                        players.stream()
+//                                .filter(player -> button.raycastToObject(player.getEyeLocation().toVector().toVector3f(), player.getEyeLocation().getDirection().toVector3f(), player.getWorld()).hit()).forEach(player -> {
+//                                    Vector3f vec = button.raycastToObject(player.getEyeLocation().toVector().toVector3f(), player.getEyeLocation().getDirection().toVector3f(), player.getWorld()).hitLoc();
+//                                    Location loc = new Location(player.getWorld(), vec.x, vec.y, vec.z);
+//                                    player.spawnParticle(Particle.END_ROD, loc, 1, 0, 0, 0);
+//                                });
                     }else {
                         display2.setItemMaterial(new ItemStack(Material.DIAMOND_BLOCK));
                     }

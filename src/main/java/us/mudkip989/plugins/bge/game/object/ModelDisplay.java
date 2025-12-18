@@ -32,7 +32,10 @@ public class ModelDisplay extends Object{
     @Override
     public void teleport(Matrix4f trans, World w) {
         Location loc = TransformUtils.getLocation(trans, w);
-        BGE.EntityTeleportQueue.put(entity, loc.setRotation(0, 0));
+//        BGE.EntityTeleportQueue.put(entity, loc.setRotation(0, 0));
+        BGE.mainQueue.add(() -> {
+            entity.teleport(loc.setRotation(0, 0));
+        });
         new Matrix4f();
         Matrix4f temp;
         try {

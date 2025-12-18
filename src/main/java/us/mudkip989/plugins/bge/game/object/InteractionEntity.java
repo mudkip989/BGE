@@ -32,7 +32,10 @@ public class InteractionEntity extends Object{
     @Override
     public void teleport(Matrix4f trans, World w) {
         Location loc = TransformUtils.getLocation(trans, w);
-        BGE.EntityTeleportQueue.put(entity, loc);
+//        BGE.EntityTeleportQueue.put(entity, loc);
+        BGE.mainQueue.add(() -> {
+            entity.teleport(loc);
+        });
 
     }
 }

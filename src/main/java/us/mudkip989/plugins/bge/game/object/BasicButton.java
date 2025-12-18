@@ -30,18 +30,24 @@ public class BasicButton extends Object {
         }
         dir.normalize();
         //convert to transformation
-        Matrix4f rayTransform = TransformUtils.getTransform(new Location(dim, pos.x, pos.y, pos.z).setDirection(new Vector(dir.x, dir.y, dir.z)));
+
         Matrix4f result = new Matrix4f();
-        Matrix4f inverse = getWorldSpaceTransform().invert(new Matrix4f());
-        inverse.mul(rayTransform, result);
-        //get raycast ray as transform relative to object
-        Vector3f newStartPos = new Vector3f();
-        Vector3f newDir = new Vector3f();
-        AxisAngle4f intermediate = new AxisAngle4f();
-        //set new raycast vars
-        result.getTranslation(newStartPos);
-        result.getRotation(intermediate);
-        intermediate.transform(new Vector3f(0, 0, 1), newDir);
+        Matrix4f inverse = new Matrix4f(getWorldSpaceTransform()).invert();
+
+        Vector3f newStartPos = inverse.transformPosition(new Vector3f(pos));
+        Vector3f newDir = inverse.transformDirection(new Vector3f(dir));
+
+
+
+
+
+//        Matrix4f rayTransform = TransformUtils.getTransform(new Location(dim, pos.x, pos.y, pos.z).setDirection(new Vector(dir.x, dir.y, dir.z)));
+//        AxisAngle4f intermediate = new AxisAngle4f();
+//        inverse.mul(rayTransform, result);
+//        //set new raycast vars
+//        result.getTranslation(newStartPos);
+//        result.getRotation(intermediate);
+//        intermediate.transform(new Vector3f(0, 0, 1), newDir);
 
         //Grab vector scale
         float scaled = newDir.length();
