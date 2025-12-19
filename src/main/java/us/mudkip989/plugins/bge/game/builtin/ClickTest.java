@@ -23,8 +23,8 @@ public class ClickTest extends Game {
     private boolean clickToggle;
 
     // Test Environment
-    public ClickTest(Matrix4f transform, World world) {
-        super(transform, world);
+    public ClickTest(Matrix4f transform, World world, String options) {
+        super(transform, world, "");
         //Object init
         display1 = new ModelDisplay(TransformUtils.getTransform(new Location(world, 0, 0, 0)), world, uuid, new ItemStack(Material.COBBLESTONE));
         display2 = new ModelDisplay(TransformUtils.getTransform(new Location(world, 1, 0, 0)), world, uuid, new ItemStack(Material.DIAMOND_BLOCK));

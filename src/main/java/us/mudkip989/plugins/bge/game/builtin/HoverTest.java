@@ -22,8 +22,8 @@ public class HoverTest extends Game{
         private boolean clickToggle;
 
         // Test Environment
-        public HoverTest(Matrix4f transform, World world) {
-            super(transform, world);
+        public HoverTest(Matrix4f transform, World world, String options) {
+            super(transform, world, "");
             //Object init
             display1 = new ModelDisplay(TransformUtils.getTransform(new Location(world, 0, 0, 0)), world, uuid, new ItemStack(Material.COBBLESTONE));
             display2 = new ModelDisplay(TransformUtils.getTransform(new Location(world, 0, 0, 0)), world, uuid, new ItemStack(Material.DIAMOND_BLOCK));

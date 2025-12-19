@@ -21,8 +21,8 @@ public class RotationTest extends Game {
     private InteractionEntity frame;
 
     // Test Environment
-    public RotationTest(Matrix4f transform, World world) {
-        super(transform, world);
+    public RotationTest(Matrix4f transform, World world, String options) {
+        super(transform, world, "");
         display1 = new ModelDisplay(TransformUtils.getTransform(new Location(world, 0, 0, 0)), world, uuid, new ItemStack(Material.COBBLESTONE));
         display2 = new ModelDisplay(TransformUtils.getTransform(new Location(world, 1, 0, 0)), world, uuid, new ItemStack(Material.DIAMOND_BLOCK));
         frame = new InteractionEntity(TransformUtils.getTransform(new Location(world, 0, 0, 0)), world, uuid, 1, 1);

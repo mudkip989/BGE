@@ -63,7 +63,7 @@ public final class BGE extends JavaPlugin {
     public boolean startGame(String id, Location loc) {
         if(!getGameIds().contains(id)) return false;
         try {
-            gameRegistry.get(id).getDeclaredConstructor(Matrix4f.class, World.class).newInstance(TransformUtils.getTransform(loc), loc.getWorld());
+            gameRegistry.get(id).getDeclaredConstructor(Matrix4f.class, World.class, String.class).newInstance(TransformUtils.getTransform(loc), loc.getWorld(), "");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

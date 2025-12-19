@@ -79,6 +79,9 @@ public abstract class Object {
 
     public void delete() {
         setParent(null);
+
+        BGE.gameInstances.get(gameId).objectTracker.remove(uuid);
+
         children.forEach(Object::delete);
     }
 

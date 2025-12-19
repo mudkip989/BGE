@@ -21,7 +21,7 @@ public abstract class Game {
 
 
 
-    public Game(Matrix4f transform, World world){
+    public Game(Matrix4f transform, World world, String options){
         uuid = UUID.randomUUID();
         task = runGameTask();
         BGE.gameInstances.put(uuid, this);
