@@ -16,12 +16,32 @@ public class CommandListener implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String @NotNull [] args) {
         Player p = (Player) sender;
 
-        //Temporary Workaround
-        if(args.length == 1){
-            if(BGE.instance.startGame(args[0], p.getLocation())){
-                Bukkit.broadcast(Component.text("Done"));
-            }
+        if(args.length == 0){
+            args = new String[1];
+            args[0] = "about";
         }
+
+        switch (args[0]){
+            case "create" -> {
+                if(BGE.instance.startGame(args[1], p.getLocation())){
+                    Bukkit.broadcast(Component.text("Done"));
+                }
+            }
+            case "about" -> {
+                p.sendMessage("Test");
+            }
+
+        }
+
+
+
+
+        //Temporary Workaround
+//        if(args.length == 1){
+//            if(BGE.instance.startGame(args[0], p.getLocation())){
+//                Bukkit.broadcast(Component.text("Done"));
+//            }
+//        }
 
         return true;
     }

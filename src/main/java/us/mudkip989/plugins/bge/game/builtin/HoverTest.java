@@ -58,7 +58,8 @@ public class HoverTest extends Game{
                     if(count > 0) {
                         display2.setItemMaterial(new ItemStack(Material.GOLD_BLOCK));
 //                        players.stream()
-//                                .filter(player -> button.raycastToObject(player.getEyeLocation().toVector().toVector3f(), player.getEyeLocation().getDirection().toVector3f(), player.getWorld()).hit()).forEach(player -> {
+//                                .filter(player -> button.raycastToObject(player.getEyeLocation().toVector().toVector3f(), player.getEyeLocation().getDirection().toVector3f(), player.getWorld()).hit())
+//                                .forEach(player -> {
 //                                    Vector3f vec = button.raycastToObject(player.getEyeLocation().toVector().toVector3f(), player.getEyeLocation().getDirection().toVector3f(), player.getWorld()).hitLoc();
 //                                    Location loc = new Location(player.getWorld(), vec.x, vec.y, vec.z);
 //                                    player.spawnParticle(Particle.END_ROD, loc, 1, 0, 0, 0);
