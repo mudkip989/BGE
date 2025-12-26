@@ -40,4 +40,11 @@ public abstract class Game {
 
     }
 
+    public void delete(){
+        task.cancel();
+        for(Object obj: objectTracker.values()){
+            obj.delete();
+        }
+    }
+
 }

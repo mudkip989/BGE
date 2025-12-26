@@ -21,6 +21,8 @@ public class ModelDisplay extends Object{
         entity.setTeleportDuration(0);
         entity.setInterpolationDuration(0);
         entity.setInterpolationDelay(0);
+        entity.addScoreboardTag("bge");
+        entity.addScoreboardTag("game:"+game.toString());
     }
 
     @Override

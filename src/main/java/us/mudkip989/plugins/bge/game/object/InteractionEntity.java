@@ -20,6 +20,7 @@ public class InteractionEntity extends Object{
         entity.addScoreboardTag("bge");
         entity.addScoreboardTag("interaction");
         entity.addScoreboardTag("game:"+game.toString());
+        entity.addScoreboardTag("object:"+uuid.toString());
         entity.setResponsive(true);
     }
 

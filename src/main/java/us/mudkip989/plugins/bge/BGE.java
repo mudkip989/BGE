@@ -35,7 +35,7 @@ public final class BGE extends JavaPlugin {
         registerGame("bge:rottest", RotationTest.class);
         registerGame("bge:clicktest", ClickTest.class);
         registerGame("bge:hovertest", HoverTest.class);
-        registerGame("bge:go", OthelloGo.class);
+        registerGame("bge:othello", Othello.class);
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -52,7 +52,28 @@ public final class BGE extends JavaPlugin {
             }
         }.runTaskTimer(BGE.instance, 1, 1);
 
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for(World world: Bukkit.getWorlds()){
+                    world.getEntities().stream().filter(entity -> (entity.getScoreboardTags().contains("bge"))).filter(entity -> {
+                        UUID gameId = null;
+                        for(String tag: entity.getScoreboardTags()){
+                            if(tag.startsWith("game:")){
+                                gameId = UUID.fromString(tag.substring(5));
+                                break;
+                            }
+
+                        }
+                        return !gameInstances.containsKey(gameId);
+                    }).forEach(Entity::remove);
+                }
+            }
+        }.runTaskTimer(BGE.instance, 1, 1);
+
     }
+
+
 
     public void registerGame(String id, Class<? extends Game> game){
         gameRegistry.put(id, game);
