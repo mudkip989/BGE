@@ -14,8 +14,11 @@ import us.mudkip989.plugins.bge.util.*;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.logging.*;
 
 public final class BGE extends JavaPlugin {
+
+    public Logger logger;
     //public final PaperPluginLogger logger = (PaperPluginLogger) PaperPluginLogger.getLogger(String.valueOf(this));
     public static Integer BGEAPIVersion = 1;
     public static BGE instance;
@@ -33,15 +36,20 @@ public final class BGE extends JavaPlugin {
 
         instance = this;
         PluginManager PM = Bukkit.getPluginManager();
+        logger = instance.getLogger();
+        logger.fine("Registering Listeners and Events");
         this.getCommand("boardgameengine").setExecutor(new CommandListener());
         this.getCommand("boardgameengine").setTabCompleter(new CommandCompleter());
         PM.registerEvents(new PassableEventListener(), this);
-
+        logger.fine("Registering Built-In Game Tests. (please move this to a separate method)");
         registerGame("bge:rottest", RotationTest.class);
         registerGame("bge:clicktest", ClickTest.class);
         registerGame("bge:hovertest", HoverTest.class);
-        //registerGame("bge:othello", Othello.class);
+//        registerGame("bge:othello", Othello.class);
 
+
+
+        logger.fine("Starting Background Tasks");
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -75,13 +83,15 @@ public final class BGE extends JavaPlugin {
                     }).forEach(Entity::remove);
                 }
             }
-        }.runTaskTimer(BGE.instance, 1, 1);
+        }.runTaskTimer(BGE.instance, 1, 5);
+
     }
 
 
 
     public void registerGame(String id, Class<? extends Game> game){
         gameRegistry.put(id, game);
+        logger.fine("Registered game ID: " + id);
     }
     public List<String> getGameIds(){
         return gameRegistry.keySet().stream().toList();
