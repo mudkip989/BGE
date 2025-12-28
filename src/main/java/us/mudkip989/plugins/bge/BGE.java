@@ -34,7 +34,7 @@ public final class BGE extends JavaPlugin {
         // Plugin startup logic
         saveDefaultConfig();                // Non-functional, testing in external project
 
-        addonLoader = new Loader();
+
 
         // ^ Starter for configs ^
 
@@ -46,6 +46,7 @@ public final class BGE extends JavaPlugin {
         this.getCommand("boardgameengine").setTabCompleter(new CommandCompleter());
         PM.registerEvents(new PassableEventListener(), this);
 
+        addonLoader = new Loader();
 
 
         logger.fine("Starting Background Tasks");
@@ -84,7 +85,7 @@ public final class BGE extends JavaPlugin {
             }
         }.runTaskTimer(BGE.instance, 1, 5);
 
-
+        reload();
 
     }
 
