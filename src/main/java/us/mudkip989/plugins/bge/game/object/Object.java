@@ -103,7 +103,7 @@ public abstract class Object {
         //parent force updating this
     }
 
-    public void setParent(Object obj) {
+    public Object setParent(Object obj) {
         if(parent != null){
             parent.removeChild(this);
         }
@@ -112,18 +112,21 @@ public abstract class Object {
         if(parent != null){
             parent.addChild(this);
         }
+        return this;
     }
 
-    protected void addChild(Object obj) {
+    protected Object addChild(Object obj) {
         if(obj != null) {
             children.add(obj);
         }
+        return this;
     }
 
-    protected void removeChild(Object obj) {
+    protected Object removeChild(Object obj) {
         if(obj != null) {
             children.remove(obj);
         }
+        return this;
     }
 
 

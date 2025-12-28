@@ -107,6 +107,7 @@ public final class BGE extends JavaPlugin {
         }
 
         gameRegistry = new HashMap<>();
+        gameInstances = new HashMap<>();
 
         addonLoader.unloadAddons();
         loadGames();
