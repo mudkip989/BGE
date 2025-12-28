@@ -33,6 +33,7 @@ public class Othello extends Game {
         //get tags
         float scale = parseOptionFloat(options,"scale");
         if(scale != 0) {
+            scale = 1;
             transformation.scale(scale);
         }
 

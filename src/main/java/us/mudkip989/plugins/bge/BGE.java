@@ -8,6 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.*;
 import org.joml.*;
 import us.mudkip989.plugins.bge.Listeners.*;
+import us.mudkip989.plugins.bge.api.*;
 import us.mudkip989.plugins.bge.game.*;
 import us.mudkip989.plugins.bge.game.builtin.*;
 import us.mudkip989.plugins.bge.util.*;
@@ -22,6 +23,7 @@ public final class BGE extends JavaPlugin {
     //public final PaperPluginLogger logger = (PaperPluginLogger) PaperPluginLogger.getLogger(String.valueOf(this));
     public static Integer BGEAPIVersion = 1;
     public static BGE instance;
+    public Loader addonLoader;
 
     private static HashMap<String, Class<? extends Game>> gameRegistry = new HashMap<>();
     public static HashMap<UUID, Game> gameInstances = new HashMap<>();
@@ -32,6 +34,8 @@ public final class BGE extends JavaPlugin {
         // Plugin startup logic
         saveDefaultConfig();                // Non-functional, testing in external project
 
+        addonLoader = new Loader();
+
         // ^ Starter for configs ^
 
         instance = this;
@@ -41,11 +45,6 @@ public final class BGE extends JavaPlugin {
         this.getCommand("boardgameengine").setExecutor(new CommandListener());
         this.getCommand("boardgameengine").setTabCompleter(new CommandCompleter());
         PM.registerEvents(new PassableEventListener(), this);
-        logger.fine("Registering Built-In Game Tests. (please move this to a separate method)");
-        registerGame("bge:rottest", RotationTest.class);
-        registerGame("bge:clicktest", ClickTest.class);
-        registerGame("bge:hovertest", HoverTest.class);
-//        registerGame("bge:othello", Othello.class);
 
 
 
@@ -85,6 +84,32 @@ public final class BGE extends JavaPlugin {
             }
         }.runTaskTimer(BGE.instance, 1, 5);
 
+
+
+    }
+
+    private void loadGames(){
+
+        logger.fine("Registering Built-In Game Tests. (please move this to a separate method)");
+        registerGame("bge:rottest", RotationTest.class);
+        registerGame("bge:clicktest", ClickTest.class);
+        registerGame("bge:hovertest", HoverTest.class);
+//        registerGame("bge:othello", Othello.class);
+
+    }
+
+    public void reload(){
+        Set<UUID> uuids = gameInstances.keySet();
+
+        for(UUID uuid: uuids){
+            gameInstances.get(uuid).delete();
+        }
+
+        gameRegistry = new HashMap<>();
+
+        addonLoader.unloadAddons();
+        loadGames();
+        addonLoader.loadAddons();
     }
 
 

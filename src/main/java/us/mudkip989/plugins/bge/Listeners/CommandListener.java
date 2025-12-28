@@ -49,6 +49,9 @@ public class CommandListener implements CommandExecutor {
                 }
 
             }
+            case "reload" -> {
+                BGE.instance.reload();
+            }
 
         }
 

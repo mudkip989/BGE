@@ -3,17 +3,12 @@ package us.mudkip989.plugins.bge.api;
 import us.mudkip989.plugins.bge.*;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.*;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.*;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
+import java.util.jar.*;
+import java.util.logging.*;
 
 public class Loader {
 
@@ -24,6 +19,7 @@ public class Loader {
 
 
     public Loader(){
+        addons = new ArrayList<>();
 
         addonDir = new File(BGE.instance.getDataFolder().getAbsolutePath() + File.separator + "addons");
         if(!addonDir.exists()){
@@ -32,12 +28,28 @@ public class Loader {
 
     }
 
-    private void loadAddons(){
+    public void unloadAddons(){
+
+        for(BGEAddon addon: addons){
+            addon.onAddonUnload();
+        }
+        addons = new ArrayList<>();
+
+    }
+
+    public void loadAddons(){
+        addons = new ArrayList<>();
+
+
         //fetching addon jars
         File[] files = addonDir.listFiles((dir, name) -> name.endsWith(".jar"));
         if (files == null) {
             //return since no addons
             return;
+        }
+
+        for (File file : files) {
+            loadAddon(file); // Go read the documentation below to understand what this does.
         }
 
 
@@ -51,7 +63,36 @@ public class Loader {
                     new URL[]{file.toURI().toURL()},
                     this.getClass().getClassLoader()
             );
-            Class mainClass =
+            Class<? extends BGEAddon> mainClass = getMainClass(file, classLoader);
+
+            BGEAddon addon;
+            try {
+                addon = mainClass.getConstructor().newInstance(); // Instantiate our main class, the class shouldn't have constructor args.
+            } catch (Exception e) {
+                BGE.instance.logger.severe("Failed to load addon: " + file.getName());
+                BGE.instance.logger.severe(e.toString());
+                return;
+            }
+
+            try{
+                Field classLoaderField = BGEAddon.class.getDeclaredField("classLoader");
+                classLoaderField.setAccessible(true);
+                Field addonFileField = BGEAddon.class.getDeclaredField("addonFile");
+                addonFileField.setAccessible(true);
+
+                classLoaderField.set(addon, classLoader);
+                addonFileField.set(addon, file);
+
+                addons.add(addon);
+                addon.onAddonLoad();
+            } catch (Exception e) {
+                BGE.instance.logger.severe(e.toString());
+            }
+
+
+
+
+
 
         } catch (Throwable ex) {
             BGE.instance.logger.severe("Failed to load addon classes from jar " + file.getName());
@@ -62,7 +103,40 @@ public class Loader {
     }
 
     private Class<? extends BGEAddon> getMainClass(File jarFile, ClassLoader classLoader){
+        try (JarInputStream jarInputStream = new JarInputStream(new FileInputStream(jarFile))) {
+            JarEntry jarEntry;
+            while ((jarEntry = jarInputStream.getNextJarEntry()) != null) { // Just iterate through every file in the jar file and check if it's a compiled java class.
+                if (jarEntry.getName().endsWith(".class")) {
 
+                    // We have to replace the '/' with '.' and remove the '.class' extension to get the canonical name of the class. (org.example.Whatever)
+                    String className = jarEntry.getName().replaceAll("/", ".").replace(".class", "");
+                    try {
+                        Class<?> clazz;
+                        try {
+                            // We don't want to initialize any classes. We'll leave that up to the JVM.
+                            clazz = Class.forName(className, false, classLoader);
+                        } catch (ClassNotFoundException | NoClassDefFoundError e) {
+                            BGE.instance.logger.severe("An exception occurred while trying to load a class from an addon");
+                            BGE.instance.logger.severe(e.toString());
+                            continue;
+                        }
+                        if (BGEAddon.class.isAssignableFrom(clazz)) {
+                            // Found our main class, we're going to load it now.
+                            classLoader.loadClass(className);
+                            return clazz.asSubclass(BGEAddon.class);
+                        }
+
+                    } catch (ClassNotFoundException e) {
+                        BGE.instance.getLogger().log(Level.SEVERE, "Failed to load class " + className, e);
+                    }
+                }
+            }
+
+
+        } catch (IOException e) {
+            BGE.instance.getLogger().log(Level.SEVERE, "Failed to load classes from jar " + jarFile.getName(), e);
+        }
+        throw new IllegalStateException("No class extending BreweryAddon found in jar " + jarFile.getName());
 
 
     }
