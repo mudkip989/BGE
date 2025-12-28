@@ -13,7 +13,7 @@ public class CommandCompleter implements TabCompleter {
     public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String @NotNull [] strings) {
         List<String> returns = new ArrayList<>();
         if(strings.length == 1){
-            returns = new ArrayList<>(Arrays.asList("create", "about", "delete", "reload"));
+            returns = new ArrayList<>(Arrays.asList("create", "about", "delete", "reload", "disableAddons"));
         }
         switch (strings[0]){
             case "create" -> {

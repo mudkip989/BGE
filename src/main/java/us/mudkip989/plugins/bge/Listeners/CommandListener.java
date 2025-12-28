@@ -50,7 +50,10 @@ public class CommandListener implements CommandExecutor {
 
             }
             case "reload" -> {
-                BGE.instance.reload();
+                BGE.instance.reload(false);
+            }
+            case "disableAddons" -> {
+                BGE.instance.reload(true);
             }
 
         }

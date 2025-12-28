@@ -85,7 +85,7 @@ public final class BGE extends JavaPlugin {
             }
         }.runTaskTimer(BGE.instance, 1, 5);
 
-        reload();
+        reload(false);
 
     }
 
@@ -99,7 +99,7 @@ public final class BGE extends JavaPlugin {
 
     }
 
-    public void reload(){
+    public void reload(Boolean disable){
         Set<UUID> uuids = gameInstances.keySet();
 
         for(UUID uuid: uuids){
@@ -111,7 +111,9 @@ public final class BGE extends JavaPlugin {
 
         addonLoader.unloadAddons();
         loadGames();
-        addonLoader.loadAddons();
+        if(!disable) {
+            addonLoader.loadAddons();
+        }
     }
 
 
