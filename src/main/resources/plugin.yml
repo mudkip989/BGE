@@ -10,3 +10,4 @@ commands:
     usage: /<command>
     description: Empty Text.
     aliases: [bge]
+    permission: bge.command

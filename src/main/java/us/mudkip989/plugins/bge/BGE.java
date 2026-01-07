@@ -95,7 +95,6 @@ public final class BGE extends JavaPlugin {
         registerGame("bge:rottest", RotationTest.class);
         registerGame("bge:clicktest", ClickTest.class);
         registerGame("bge:hovertest", HoverTest.class);
-//        registerGame("bge:othello", Othello.class);
 
     }
 

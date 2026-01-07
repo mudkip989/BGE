@@ -1,11 +1,13 @@
 package us.mudkip989.plugins.bge.game.processors;
 
+import us.mudkip989.plugins.bge.dataTypes.*;
+
 import javax.annotation.*;
 
 public class CommandOptionParser {
 
-
-    public static String parseOptionString(String options, String option){
+    @Nullable
+    public static FlagData parseOptionString(String options, String option){
 
         String[] vals = options.split(" ");
 
@@ -14,13 +16,15 @@ public class CommandOptionParser {
         for(String thing: vals){
             if(thing.startsWith("-" + option)){
                 val = thing.split("=", 2)[1];
+                return new FlagData(val);
             }
         }
 
-        return val;
+        return null;
     }
 
-    public static Integer parseOptionInt(String options, String option){
+    @Nullable
+    public static FlagData parseOptionInt(String options, String option){
 
         String[] vals = options.split(" ");
 
@@ -29,18 +33,19 @@ public class CommandOptionParser {
         for(String thing: vals){
             if(thing.startsWith("-" + option)){
                 val = thing.split("=", 2)[1];
+                if(val == ""){
+                    return new FlagData(0);
+                }
+
+                return new FlagData(Integer.parseInt(val));
             }
         }
 
-        if(val == ""||val == null){
-            return 0;
-        }
-
-        return Integer.parseInt(val);
+        return null;
     }
 
-
-    public static Float parseOptionFloat(String options, String option){
+    @Nullable
+    public static FlagData parseOptionFloat(String options, String option){
 
         String[] vals = options.split(" ");
 
@@ -49,14 +54,26 @@ public class CommandOptionParser {
         for(String thing: vals){
             if(thing.startsWith("-" + option)){
                 val = thing.split("=", 2)[1];
+                if(val == ""||val == null){
+                    return new FlagData(0f);
+                }
+
+                return new FlagData(Float.parseFloat(val));
             }
         }
 
-        if(val == ""||val == null){
-            return 0f;
-        }
+        return null;
+    }
 
-        return Float.parseFloat(val);
+    public static Boolean hasFlag(String options, String option){
+        String[] vals = options.split(" ");
+
+        for(String thing: vals){
+            if(thing == option){
+                return true;
+            }
+        }
+        return false;
     }
 
 
