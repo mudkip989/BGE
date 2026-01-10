@@ -1,6 +1,5 @@
 package us.mudkip989.plugins.bge;
 
-import com.destroystokyo.paper.utils.PaperPluginLogger;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.plugin.*;
@@ -8,7 +7,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.*;
 import org.joml.*;
 import us.mudkip989.plugins.bge.Listeners.*;
-import us.mudkip989.plugins.bge.api.*;
 import us.mudkip989.plugins.bge.game.*;
 import us.mudkip989.plugins.bge.game.builtin.*;
 import us.mudkip989.plugins.bge.util.*;
@@ -23,7 +21,7 @@ public final class BGE extends JavaPlugin {
     //public final PaperPluginLogger logger = (PaperPluginLogger) PaperPluginLogger.getLogger(String.valueOf(this));
     public static Integer BGEAPIVersion = 1;
     public static BGE instance;
-    public Loader addonLoader;
+    public AddonLoader addonLoader;
 
     private static HashMap<String, Class<? extends Game>> gameRegistry = new HashMap<>();
     public static HashMap<UUID, Game> gameInstances = new HashMap<>();
@@ -42,11 +40,11 @@ public final class BGE extends JavaPlugin {
         PluginManager PM = Bukkit.getPluginManager();
         logger = instance.getLogger();
         logger.fine("Registering Listeners and Events");
-        this.getCommand("boardgameengine").setExecutor(new CommandListener());
-        this.getCommand("boardgameengine").setTabCompleter(new CommandCompleter());
+        Objects.requireNonNull(this.getCommand("boardgameengine")).setExecutor(new CommandListener());
+        Objects.requireNonNull(this.getCommand("boardgameengine")).setTabCompleter(new CommandCompleter());
         PM.registerEvents(new PassableEventListener(), this);
 
-        addonLoader = new Loader();
+        addonLoader = new AddonLoader();
 
 
         logger.fine("Starting Background Tasks");
