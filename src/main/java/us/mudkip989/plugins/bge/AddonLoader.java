@@ -13,12 +13,7 @@ import java.util.logging.*;
 
 public class AddonLoader {
     private List<BGEAddon> addons;
-    private File addonDir;
-    private HashMap<String, HashMap<String, Class<? extends Game>>> addonGames = new HashMap<>();
-
-    public void validateGames() {
-
-    }
+    private final File addonDir;
 
     public AddonLoader(){
         addons = new ArrayList<>();
@@ -27,16 +22,13 @@ public class AddonLoader {
         if(!addonDir.exists()){
             addonDir.mkdirs();
         }
-
     }
 
-    public void unloadAddons(){
-
+    void unloadAddons(){
         for(BGEAddon addon: addons){
             addon.onAddonUnload();
         }
         addons = new ArrayList<>();
-
     }
 
     void loadAddons(){
