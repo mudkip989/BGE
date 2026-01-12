@@ -25,6 +25,7 @@ public class TextObject extends Object{
         entity.setBillboard(Display.Billboard.FIXED);
         entity.addScoreboardTag("bge");
         entity.addScoreboardTag("game:"+game.toString());
+        entity.setBackgroundColor(Color.fromARGB(0, 0, 0, 0));
     }
 
     @Override
