@@ -1,5 +1,7 @@
 package us.mudkip989.plugins.bge.api;
 
+import org.jetbrains.annotations.*;
+
 import java.io.*;
 import java.net.*;
 
@@ -7,6 +9,12 @@ public abstract class BGEAddon {
 
     private URLClassLoader classLoader;
     private File addonFile;
+    private AddonInfo addonInfo;
+
+    @NotNull
+    public AddonInfo getAddonInfo() {
+        return addonInfo;
+    }
 
 
     public void onAddonLoad() {

@@ -1,6 +1,6 @@
-package us.mudkip989.plugins.bge.api;
+package us.mudkip989.plugins.bge;
 
-import us.mudkip989.plugins.bge.*;
+import us.mudkip989.plugins.bge.api.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -10,15 +10,15 @@ import java.util.*;
 import java.util.jar.*;
 import java.util.logging.*;
 
-public class Loader {
+public class AddonLoader {
 
 
     private List<BGEAddon> addons;
 
-    private File addonDir;
+    private final File addonDir;
 
 
-    public Loader(){
+    public AddonLoader(){
         addons = new ArrayList<>();
 
         addonDir = new File(BGE.instance.getDataFolder().getAbsolutePath() + File.separator + "addons");
@@ -28,7 +28,7 @@ public class Loader {
 
     }
 
-    public void unloadAddons(){
+    void unloadAddons(){
 
         for(BGEAddon addon: addons){
             addon.onAddonUnload();
@@ -37,7 +37,7 @@ public class Loader {
 
     }
 
-    public void loadAddons(){
+    void loadAddons(){
         addons = new ArrayList<>();
 
 
