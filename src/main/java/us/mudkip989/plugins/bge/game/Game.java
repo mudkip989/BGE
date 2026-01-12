@@ -10,6 +10,7 @@ import us.mudkip989.plugins.bge.*;
 import us.mudkip989.plugins.bge.dataTypes.*;
 import us.mudkip989.plugins.bge.game.object.Object;
 
+import java.lang.Math;
 import java.util.*;
 
 import static us.mudkip989.plugins.bge.game.processors.CommandOptionParser.parseOptionFloat;
@@ -35,13 +36,13 @@ public abstract class Game {
         FlagData rotZ = parseOptionFloat(options, "rotationZ");
 
         if(rotX != null){
-            rotation.x = (float) rotX.val();
+            rotation.x = ((float)rotX.val() * (float)Math.PI)/180f;
         }
         if(rotY != null){
-            rotation.y = (float) rotY.val();
+            rotation.y = ((float)rotY.val() * (float)Math.PI)/180f;
         }
         if(rotZ != null){
-            rotation.z = (float) rotZ.val();
+            rotation.z = ((float)rotZ.val() * (float)Math.PI)/180f;
         }
 
         Vector3f translation = transform.getTranslation(new Vector3f());
