@@ -13,22 +13,78 @@ import java.util.logging.*;
 public class AddonLoader {
 
 
-    private List<BGEAddon> addons;
+    private List<File> addonJars;
+    private List<Class<? extends BGEAddon>> detectedAddons;
+    private HashMap<Boolean, BGEAddon> addons;
+    private HashMap<String, BGEAddon> namespaceMap;
 
     private final File addonDir;
 
 
     public AddonLoader(){
-        addons = new ArrayList<>();
+        addons = new HashMap<>();
 
         addonDir = new File(BGE.instance.getDataFolder().getAbsolutePath() + File.separator + "addons");
         if(!addonDir.exists()){
             addonDir.mkdirs();
         }
 
+
+
+
+    }
+    /*
+    Addon Management Features [/] = partially done,  [X] = done
+    [] - Command to disable specific addons
+    [/] - Get updated list of all Jars in the Addon folder
+    [] - Send a Ping Plugin Addons event to automatically fetch addons from existing plugins
+    [] - reload command only loads addons enabled in addons
+    [] - when enabling/disabling specific addons, try not to reload everything and to only remove games from said addon.
+    [] - reload specific addons
+
+     */
+
+    void fetchAddonJars(){
+        addonJars = new ArrayList<>();
+        //fetching addon jars
+        File[] files = addonDir.listFiles((dir, name) -> name.endsWith(".jar"));
+        if (files == null) {
+            //return since no addons
+            BGE.instance.logger.fine("No Addons found in addon folder.");
+            return;
+        }
+        BGE.instance.logger.fine("Addon Jars found.");
+        addonJars = Arrays.stream(files).toList();
     }
 
-    void unloadAddons(){
+    public void fetchPluginAddon(Class<? extends BGEAddon> addonClass){
+
+
+
+
+    }
+
+    private void getAddonClasses(){
+
+    }
+
+
+
+
+    void prepNameSpaceMounting() {
+
+    }
+
+
+
+
+
+
+
+
+
+
+    void oldunloadAddons(){
 
         for(BGEAddon addon: addons){
             addon.onAddonUnload();
@@ -37,9 +93,9 @@ public class AddonLoader {
 
     }
 
-    void loadAddons(){
-        addons = new ArrayList<>();
 
+    //Replacing with more robust methods
+    void oldloadAddons(){
 
         //fetching addon jars
         File[] files = addonDir.listFiles((dir, name) -> name.endsWith(".jar"));
@@ -49,15 +105,19 @@ public class AddonLoader {
         }
 
         for (File file : files) {
-            loadAddon(file); // Go read the documentation below to understand what this does.
+            oldmountAddon(file);
         }
 
 
     }
 
-    private void loadAddon(File file){
+
+
+    //Read Through check
+    private void oldmountAddon(File file){
 
         try{
+
 
             URLClassLoader classLoader = new URLClassLoader(
                     new URL[]{file.toURI().toURL()},
@@ -84,7 +144,7 @@ public class AddonLoader {
                 addonFileField.set(addon, file);
 
                 addons.add(addon);
-                addon.onAddonLoad();
+//                addon.onAddonLoad();  //We no longer will load in this method.
             } catch (Exception e) {
                 BGE.instance.logger.severe(e.toString());
             }

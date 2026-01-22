@@ -23,7 +23,11 @@ public final class BGE extends JavaPlugin {
     public static BGE instance;
     public AddonLoader addonLoader;
 
-    private static HashMap<String, Class<? extends Game>> gameRegistry = new HashMap<>();
+    private static HashMap<String, HashMap<String, Class<? extends Game>>> gameRegistry = new HashMap<>();
+
+
+
+    //    private static HashMap<String, Class<? extends Game>> gameRegistry = new HashMap<>();
     public static HashMap<UUID, Game> gameInstances = new HashMap<>();
     public static Queue<Runnable> mainQueue = new ConcurrentLinkedQueue<>();
 
@@ -90,13 +94,13 @@ public final class BGE extends JavaPlugin {
     private void loadGames(){
 
         logger.fine("Registering Built-In Game Tests. (please move this to a separate method)");
-        registerGame("bge:rottest", RotationTest.class);
-        registerGame("bge:clicktest", ClickTest.class);
-        registerGame("bge:hovertest", HoverTest.class);
+        registerGame("bge", "rottest", RotationTest.class);
+        registerGame("bge", "clicktest", ClickTest.class);
+        registerGame("bge", "hovertest", HoverTest.class);
 
     }
 
-    public void reload(Boolean disable){
+    public void reload(Boolean Panic){
         Set<UUID> uuids = gameInstances.keySet();
 
         for(UUID uuid: uuids){
@@ -106,27 +110,45 @@ public final class BGE extends JavaPlugin {
         gameRegistry = new HashMap<>();
         gameInstances = new HashMap<>();
 
-        addonLoader.unloadAddons();
+        addonLoader.oldunloadAddons();
         loadGames();
-        if(!disable) {
-            addonLoader.loadAddons();
+        if(!Panic) {
+            addonLoader.oldloadAddons();
         }
     }
 
 
 
-    public static void registerGame(String id, Class<? extends Game> game){
-        gameRegistry.put(id, game);
+    public static void registerGame(String namespace, String id, Class<? extends Game> game){
+        if(!gameRegistry.containsKey(namespace)) {
+            HashMap<String, Class<? extends Game>> mappy = new HashMap<>();
+            mappy.put(id, game);
+            gameRegistry.put(namespace, mappy);
+        }else{
+            gameRegistry.get(namespace).put(id, game);
+        }
         BGE.instance.logger.fine("Registered game ID: " + id);
     }
+
     public List<String> getGameIds(){
-        return gameRegistry.keySet().stream().toList();
+        List<String> responses = new ArrayList<>();
+
+        gameRegistry.forEach((namespace, secondmap) -> {
+            secondmap.keySet().forEach(id -> {
+                responses.add(namespace + ":" + id);
+            });
+
+        });
+        return responses;
     }
 
     public boolean startGame(String id, Location loc, String options) {
+        String[] idSplit = id.split(":");
+        String idnamespace = idSplit[0];
+        String idgame = idSplit[1];
         if(!getGameIds().contains(id)) return false;
         try {
-            gameRegistry.get(id).getDeclaredConstructor(Matrix4f.class, World.class, String.class)
+            gameRegistry.get(idnamespace).get(idgame).getDeclaredConstructor(Matrix4f.class, World.class, String.class)
                     .newInstance(TransformUtils.getTransform(loc), loc.getWorld(), options);
         } catch (Exception e) {
             throw new RuntimeException(e);

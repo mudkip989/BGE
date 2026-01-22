@@ -4,6 +4,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.*;
 import org.bukkit.event.player.*;
 import us.mudkip989.plugins.bge.*;
+import us.mudkip989.plugins.bge.api.*;
 import us.mudkip989.plugins.bge.game.*;
 
 import java.util.*;
@@ -29,6 +30,13 @@ public class PassableEventListener implements Listener {
             }
         }
 
+
+    }
+
+    @EventHandler
+    public void fetchAddonEvent(FetchAddonEvent e){
+
+        BGE.instance.logger.fine("Custom Event Triggered");
 
     }
 
