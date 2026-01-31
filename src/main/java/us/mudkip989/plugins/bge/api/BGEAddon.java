@@ -9,10 +9,10 @@ public abstract class BGEAddon {
 
     private URLClassLoader classLoader;
     private File addonFile;
-    private AddonInfo addonInfo;
+    private static AddonInfo addonInfo;
 
     @NotNull
-    public AddonInfo getAddonInfo() {
+    public static AddonInfo getAddonInfo() {
         return addonInfo;
     }
 

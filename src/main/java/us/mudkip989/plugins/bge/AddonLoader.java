@@ -15,14 +15,25 @@ public class AddonLoader {
 
     private List<File> addonJars;
     private List<Class<? extends BGEAddon>> detectedAddons;
-    private HashMap<Boolean, BGEAddon> addons;
+    private List<Class<? extends BGEAddon>> detectedPluginAddons;
+    private HashMap<String, AddonData> addons;
     private HashMap<String, BGEAddon> namespaceMap;
 
     private final File addonDir;
 
+    /*
+    -fetch jars to addonJars
+
+
+     */
+
 
     public AddonLoader(){
         addons = new HashMap<>();
+        addonJars = new ArrayList<>();
+        detectedAddons = new ArrayList<>();
+        detectedPluginAddons = new ArrayList<>();
+        namespaceMap = new HashMap<>();
 
         addonDir = new File(BGE.instance.getDataFolder().getAbsolutePath() + File.separator + "addons");
         if(!addonDir.exists()){
@@ -57,11 +68,8 @@ public class AddonLoader {
         addonJars = Arrays.stream(files).toList();
     }
 
-    public void fetchPluginAddon(Class<? extends BGEAddon> addonClass){
-
-
-
-
+    public void catchPluginAddon(Class<? extends BGEAddon> addonClass){
+        detectedAddons.add(addonClass);
     }
 
     private void getAddonClasses(){
@@ -166,7 +174,7 @@ public class AddonLoader {
         try (JarInputStream jarInputStream = new JarInputStream(new FileInputStream(jarFile))) {
             JarEntry jarEntry;
             while ((jarEntry = jarInputStream.getNextJarEntry()) != null) { // Just iterate through every file in the jar file and check if it's a compiled java class.
-                if (jarEntry.getName().endsWith(".class")) {
+                if (jarEntry.getName().endsWith(".class") && !jarEntry.getName().contains("BGEAddon.class")) {
 
                     // We have to replace the '/' with '.' and remove the '.class' extension to get the canonical name of the class. (org.example.Whatever)
                     String className = jarEntry.getName().replaceAll("/", ".").replace(".class", "");

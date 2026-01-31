@@ -32,23 +32,33 @@ public final class BGE extends JavaPlugin {
     public static Queue<Runnable> mainQueue = new ConcurrentLinkedQueue<>();
 
     @Override
-    public void onEnable() {
+    public void onLoad() {
         // Plugin startup logic
-        saveDefaultConfig();                // Non-functional, testing in external project
+        saveDefaultConfig();
+
+        instance = this;
+
+        logger = instance.getLogger();
+
+        //variable initializers
+        //Needs to happen before the enabling process so that other plugins dont fail to get added.
+        addonLoader = new AddonLoader();
+    }
+
+    @Override
+    public void onEnable() {             // Non-functional, testing in external project
 
 
 
         // ^ Starter for configs ^
 
-        instance = this;
         PluginManager PM = Bukkit.getPluginManager();
-        logger = instance.getLogger();
         logger.fine("Registering Listeners and Events");
         this.getCommand("boardgameengine").setExecutor(new CommandListener());
         this.getCommand("boardgameengine").setTabCompleter(new CommandCompleter());
         PM.registerEvents(new PassableEventListener(), this);
 
-        addonLoader = new AddonLoader();
+
 
 
         logger.fine("Starting Background Tasks");

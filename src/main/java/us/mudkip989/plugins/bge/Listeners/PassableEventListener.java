@@ -33,11 +33,5 @@ public class PassableEventListener implements Listener {
 
     }
 
-    @EventHandler
-    public void fetchAddonEvent(FetchAddonEvent e){
-
-        BGE.instance.logger.fine("Custom Event Triggered");
-
-    }
 
 }
