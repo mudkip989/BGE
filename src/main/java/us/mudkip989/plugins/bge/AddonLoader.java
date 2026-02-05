@@ -1,6 +1,7 @@
 package us.mudkip989.plugins.bge;
 
 import us.mudkip989.plugins.bge.api.*;
+import us.mudkip989.plugins.bge.util.exceptions.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -16,8 +17,8 @@ public class AddonLoader {
     private List<File> addonJars;
     private List<Class<? extends BGEAddon>> detectedAddons;
     private List<Class<? extends BGEAddon>> detectedPluginAddons;
-    private HashMap<String, AddonData> addons;
-    private HashMap<String, BGEAddon> namespaceMap;
+    private HashMap<String, Class<? extends BGEAddon>> addons;
+    private HashMap<String, AddonData> namespaceMap;
 
     private final File addonDir;
 
@@ -44,6 +45,17 @@ public class AddonLoader {
 
 
     }
+
+    void initialize() {
+
+        fetchAddonJars();
+
+        getAddonClasses();
+
+    }
+
+
+
     /*
     Addon Management Features [/] = partially done,  [X] = done
     [] - Command to disable specific addons
@@ -69,17 +81,78 @@ public class AddonLoader {
     }
 
     public void catchPluginAddon(Class<? extends BGEAddon> addonClass){
-        detectedAddons.add(addonClass);
+        detectedPluginAddons.add(addonClass);
     }
 
     private void getAddonClasses(){
+        detectedAddons = new ArrayList<>();
+
+        for(File file: addonJars) {
+            try {
+                URLClassLoader classLoader = new URLClassLoader(
+                        new URL[]{file.toURI().toURL()},
+                        this.getClass().getClassLoader()
+                );
+
+                Class<? extends BGEAddon> addon = getMainClass(file, classLoader);
+                detectedAddons.add(addon);
+
+            }catch (Exception e){
+                BGE.instance.getLogger().severe("Failed to load Addon: " + file.getName());
+                BGE.instance.getLogger().severe(e.toString());
+
+            }
+
+
+        }
+
+
 
     }
 
 
 
 
-    void prepNameSpaceMounting() {
+    void nameSpaceMapping() {
+
+
+
+        for(Class<? extends BGEAddon> clazz: detectedPluginAddons){
+            try {
+                Method getter = clazz.getDeclaredMethod("AddonInfo");
+                Object result = getter.invoke(null);
+                AddonInfo info = (AddonInfo) result;
+                String namespace = info.namespace();
+                if(addons.keySet().contains(namespace)){
+                    throw new DuplicateNamespaceException();
+                }else{
+                    addons.put(namespace, clazz);
+                }
+
+            }catch (Exception e){
+                BGE.instance.getLogger().severe("Failed to get AddonInfo for Class: " + clazz.getName());
+                BGE.instance.getLogger().severe(e.toString());
+            }
+        }
+
+        for(Class<? extends BGEAddon> clazz: detectedAddons){
+            try {
+                Method getter = clazz.getDeclaredMethod("AddonInfo");
+                Object result = getter.invoke(null);
+                AddonInfo info = (AddonInfo) result;
+                String namespace = info.namespace();
+                if(addons.keySet().contains(namespace)){
+                    throw new DuplicateNamespaceException();
+                }else{
+                    addons.put(namespace, clazz);
+                }
+
+            }catch (Exception e){
+                BGE.instance.getLogger().severe("Failed to get AddonInfo for Class: " + clazz.getName());
+                BGE.instance.getLogger().severe(e.toString());
+            }
+        }
+
 
     }
 
@@ -170,6 +243,13 @@ public class AddonLoader {
 
     }
 
+
+    /*
+    -------------------------WARNING----------------------
+    Keep this method. I dont wanna rewrite this right now.
+
+    This was borrowed from BreweryX
+     */
     private Class<? extends BGEAddon> getMainClass(File jarFile, ClassLoader classLoader){
         try (JarInputStream jarInputStream = new JarInputStream(new FileInputStream(jarFile))) {
             JarEntry jarEntry;

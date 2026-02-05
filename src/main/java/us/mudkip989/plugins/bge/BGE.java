@@ -5,6 +5,7 @@ import org.bukkit.entity.*;
 import org.bukkit.plugin.*;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.*;
+import org.jetbrains.annotations.*;
 import org.joml.*;
 import us.mudkip989.plugins.bge.Listeners.*;
 import us.mudkip989.plugins.bge.game.*;
@@ -97,7 +98,18 @@ public final class BGE extends JavaPlugin {
             }
         }.runTaskTimer(BGE.instance, 1, 5);
 
-        reload(false);
+//        reload(false);
+
+        //Trigger auto-mount after 10 seconds
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+
+
+
+            }
+        }.runTaskLater(BGE.instance, 200);
+
 
     }
 

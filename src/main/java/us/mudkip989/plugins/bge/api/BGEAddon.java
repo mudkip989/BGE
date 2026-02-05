@@ -16,6 +16,11 @@ public abstract class BGEAddon {
         return addonInfo;
     }
 
+    @NotNull
+    public AddonInfo AddonInfo() {
+        return addonInfo;
+    }
+
 
     public void onAddonLoad() {
         // Code for this addon which runs after the addon is enabled.

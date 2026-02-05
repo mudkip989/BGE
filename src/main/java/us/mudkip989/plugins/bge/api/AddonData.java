@@ -6,40 +6,34 @@ import java.lang.reflect.*;
 
 public class AddonData {
 
-    private Class<? extends BGEAddon> addon;
+    private BGEAddon addon;
     private AddonInfo addonInfo;
     private boolean enabled = false;
 
-    public AddonData(Class<? extends BGEAddon> mClass) {
-        addon = mClass;
-        try{
-            Method getter = mClass.getDeclaredMethod("getAddonInfo");
-            Object result = getter.invoke(null);
-            addonInfo = (AddonInfo) result;
+//    try{
+//        Method getter = mClass.getDeclaredMethod("getAddonInfo");
+//        Object result = getter.invoke(null);
+//        addonInfo = (AddonInfo) result;
+//
+//    } catch (Exception e) {
+//        System.out.println(e);
+//        return;
+//    }
 
-        } catch (Exception e) {
-            System.out.println(e);
-            return;
-        }
+    public AddonData(BGEAddon mClass) {
+        addon = mClass;
+        addonInfo = addon.AddonInfo();
         this.enabled = true;
     }
 
-    public AddonData(Class<? extends BGEAddon> mClass, boolean enabled){
+    public AddonData(BGEAddon mClass, boolean enabled){
         addon = mClass;
-        try{
-            Method getter = mClass.getDeclaredMethod("getAddonInfo");
-            Object result = getter.invoke(null);
-            addonInfo = (AddonInfo) result;
-
-        } catch (Exception e) {
-            System.out.println(e);
-            return;
-        }
+        addonInfo = addon.AddonInfo();
         this.enabled = enabled;
     }
 
 
-    public Class<? extends BGEAddon> getMainClass() {
+    public BGEAddon getMainClass() {
         return addon;
     }
 
