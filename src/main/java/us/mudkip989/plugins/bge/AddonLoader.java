@@ -17,8 +17,8 @@ public class AddonLoader {
     private List<File> addonJars;
     private List<Class<? extends BGEAddon>> detectedAddons;
     private List<Class<? extends BGEAddon>> detectedPluginAddons;
-    private HashMap<String, Class<? extends BGEAddon>> addons;
-    private HashMap<String, AddonData> namespaceMap;
+    private HashMap<String, Class<? extends BGEAddon>> nameSpaceReservation;
+    private HashMap<String, AddonData> addonStatus;
 
     private final File addonDir;
 
@@ -30,11 +30,11 @@ public class AddonLoader {
 
 
     public AddonLoader(){
-        addons = new HashMap<>();
+        nameSpaceReservation = new HashMap<>();
         addonJars = new ArrayList<>();
         detectedAddons = new ArrayList<>();
         detectedPluginAddons = new ArrayList<>();
-        namespaceMap = new HashMap<>();
+        addonStatus = new HashMap<>();
 
         addonDir = new File(BGE.instance.getDataFolder().getAbsolutePath() + File.separator + "addons");
         if(!addonDir.exists()){
@@ -52,7 +52,12 @@ public class AddonLoader {
 
         getAddonClasses();
 
+        nameSpaceMapping();
+
+
+
     }
+
 
 
 
@@ -123,10 +128,10 @@ public class AddonLoader {
                 Object result = getter.invoke(null);
                 AddonInfo info = (AddonInfo) result;
                 String namespace = info.namespace();
-                if(addons.keySet().contains(namespace)){
+                if(nameSpaceReservation.keySet().contains(namespace)){
                     throw new DuplicateNamespaceException();
                 }else{
-                    addons.put(namespace, clazz);
+                    nameSpaceReservation.put(namespace, clazz);
                 }
 
             }catch (Exception e){
@@ -141,10 +146,10 @@ public class AddonLoader {
                 Object result = getter.invoke(null);
                 AddonInfo info = (AddonInfo) result;
                 String namespace = info.namespace();
-                if(addons.keySet().contains(namespace)){
+                if(nameSpaceReservation.keySet().contains(namespace)){
                     throw new DuplicateNamespaceException();
                 }else{
-                    addons.put(namespace, clazz);
+                    nameSpaceReservation.put(namespace, clazz);
                 }
 
             }catch (Exception e){
@@ -156,92 +161,102 @@ public class AddonLoader {
 
     }
 
+    void initializeAllAddons(){
 
 
-
-
-
-
-
-
-
-    void oldunloadAddons(){
-
-        for(BGEAddon addon: addons){
-            addon.onAddonUnload();
-        }
-        addons = new ArrayList<>();
-
-    }
-
-
-    //Replacing with more robust methods
-    void oldloadAddons(){
-
-        //fetching addon jars
-        File[] files = addonDir.listFiles((dir, name) -> name.endsWith(".jar"));
-        if (files == null) {
-            //return since no addons
-            return;
-        }
-
-        for (File file : files) {
-            oldmountAddon(file);
-        }
 
 
     }
 
 
 
-    //Read Through check
-    private void oldmountAddon(File file){
-
-        try{
-
-
-            URLClassLoader classLoader = new URLClassLoader(
-                    new URL[]{file.toURI().toURL()},
-                    this.getClass().getClassLoader()
-            );
-            Class<? extends BGEAddon> mainClass = getMainClass(file, classLoader);
-
-            BGEAddon addon;
-            try {
-                addon = mainClass.getConstructor().newInstance(); // Instantiate our main class, the class shouldn't have constructor args.
-            } catch (Exception e) {
-                BGE.instance.logger.severe("Failed to load addon: " + file.getName());
-                BGE.instance.logger.severe(e.toString());
-                return;
-            }
-
-            try{
-                Field classLoaderField = BGEAddon.class.getDeclaredField("classLoader");
-                classLoaderField.setAccessible(true);
-                Field addonFileField = BGEAddon.class.getDeclaredField("addonFile");
-                addonFileField.setAccessible(true);
-
-                classLoaderField.set(addon, classLoader);
-                addonFileField.set(addon, file);
-
-                addons.add(addon);
-//                addon.onAddonLoad();  //We no longer will load in this method.
-            } catch (Exception e) {
-                BGE.instance.logger.severe(e.toString());
-            }
 
 
 
 
 
 
-        } catch (Throwable ex) {
-            BGE.instance.logger.severe("Failed to load addon classes from jar " + file.getName());
-            BGE.instance.logger.severe(ex.toString());
-        }
 
 
-    }
+
+
+//    void oldunloadAddons(){
+//
+//        for(BGEAddon addon: nameSpaceReservation){
+//            addon.onAddonUnload();
+//        }
+//        nameSpaceReservation = new ArrayList<>();
+//
+//    }
+//
+//
+//    //Replacing with more robust methods
+//    void oldloadAddons(){
+//
+//        //fetching addon jars
+//        File[] files = addonDir.listFiles((dir, name) -> name.endsWith(".jar"));
+//        if (files == null) {
+//            //return since no addons
+//            return;
+//        }
+//
+//        for (File file : files) {
+//            oldmountAddon(file);
+//        }
+//
+//
+//    }
+//
+//
+//
+//    //Read Through check
+//    private void oldmountAddon(File file){
+//
+//        try{
+//
+//
+//            URLClassLoader classLoader = new URLClassLoader(
+//                    new URL[]{file.toURI().toURL()},
+//                    this.getClass().getClassLoader()
+//            );
+//            Class<? extends BGEAddon> mainClass = getMainClass(file, classLoader);
+//
+//            BGEAddon addon;
+//            try {
+//                addon = mainClass.getConstructor().newInstance(); // Instantiate our main class, the class shouldn't have constructor args.
+//            } catch (Exception e) {
+//                BGE.instance.logger.severe("Failed to load addon: " + file.getName());
+//                BGE.instance.logger.severe(e.toString());
+//                return;
+//            }
+//
+//            try{
+//                Field classLoaderField = BGEAddon.class.getDeclaredField("classLoader");
+//                classLoaderField.setAccessible(true);
+//                Field addonFileField = BGEAddon.class.getDeclaredField("addonFile");
+//                addonFileField.setAccessible(true);
+//
+//                classLoaderField.set(addon, classLoader);
+//                addonFileField.set(addon, file);
+//
+//                nameSpaceReservation.add(addon);
+////                addon.onAddonLoad();  //We no longer will load in this method.
+//            } catch (Exception e) {
+//                BGE.instance.logger.severe(e.toString());
+//            }
+//
+//
+//
+//
+//
+//
+//        } catch (Throwable ex) {
+//            BGE.instance.logger.severe("Failed to load addon classes from jar " + file.getName());
+//            BGE.instance.logger.severe(ex.toString());
+//        }
+//
+//
+//    }
 
 
     /*

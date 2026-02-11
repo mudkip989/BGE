@@ -105,7 +105,7 @@ public final class BGE extends JavaPlugin {
             @Override
             public void run() {
 
-
+                addonLoader.initialize();
 
             }
         }.runTaskLater(BGE.instance, 200);

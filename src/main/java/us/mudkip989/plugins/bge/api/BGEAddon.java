@@ -1,9 +1,11 @@
 package us.mudkip989.plugins.bge.api;
 
 import org.jetbrains.annotations.*;
+import us.mudkip989.plugins.bge.game.*;
 
 import java.io.*;
 import java.net.*;
+import java.util.*;
 
 public abstract class BGEAddon {
 
@@ -25,6 +27,9 @@ public abstract class BGEAddon {
     public void onAddonLoad() {
         // Code for this addon which runs after the addon is enabled.
     }
+
+    public abstract HashMap<String, Class<? extends Game>> getGames();
+
 
     public void onAddonUnload() {
         // Code for this addon which runs before the addon is disabled.
